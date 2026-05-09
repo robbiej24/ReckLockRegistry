@@ -5,12 +5,12 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-RUN useradd --system --uid 10001 --home-dir /app --shell /usr/sbin/nologin agenttrust
+RUN useradd --system --uid 10001 --home-dir /app --shell /usr/sbin/nologin recklock
 
 WORKDIR /app
 
 COPY pyproject.toml README.md ./
-COPY agenttrust ./agenttrust
+COPY recklock ./recklock
 COPY db ./db
 
 RUN pip install --no-cache-dir --upgrade pip \
@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir --upgrade pip \
 COPY docker-entrypoint.sh /docker-entrypoint.sh
 RUN chmod +x /docker-entrypoint.sh
 
-USER agenttrust
+USER recklock
 
 EXPOSE 8080
 

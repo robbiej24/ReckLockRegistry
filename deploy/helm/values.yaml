@@ -21,11 +21,11 @@ ingress:
 resources: {}
 
 env:
-  AGENTTRUST_ENV: production
-  AGENTTRUST_API_HOST: "0.0.0.0"
-  AGENTTRUST_API_PORT: "8080"
+  RECKLOCK_ENV: production
+  RECKLOCK_API_HOST: "0.0.0.0"
+  RECKLOCK_API_PORT: "8080"
   RECKLOCK_REGISTRY_ROOT: "/data/registry"
-  AGENTTRUST_ENABLE_REAL_CONNECTORS: "false"
+  RECKLOCK_ENABLE_REAL_CONNECTORS: "false"
 
 # SQLAlchemy URL for PostgreSQL (postgresql+psycopg://…). Required for production-style installs.
 database:

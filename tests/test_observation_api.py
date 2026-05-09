@@ -8,11 +8,11 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
-from agenttrust.api.app import create_app, reset_cached_settings_for_tests
-from agenttrust.api.settings import ApiSettings
-from agenttrust.auth.service import create_api_key
-from agenttrust.db.init_db import init_database
-from agenttrust.db.session import create_engine_from_settings
+from recklock.api.app import create_app, reset_cached_settings_for_tests
+from recklock.api.settings import ApiSettings
+from recklock.auth.service import create_api_key
+from recklock.db.init_db import init_database
+from recklock.db.session import create_engine_from_settings
 from sqlalchemy.orm import sessionmaker
 
 

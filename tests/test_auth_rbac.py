@@ -9,11 +9,11 @@ from fastapi.testclient import TestClient
 from sqlalchemy import update
 from sqlalchemy.orm import sessionmaker
 
-from agenttrust.api.app import create_app, reset_cached_settings_for_tests
-from agenttrust.api.settings import ApiSettings
-from agenttrust.auth.service import create_api_key, hash_api_key
-from agenttrust.db import models as m
-from agenttrust.db.session import create_engine_from_settings
+from recklock.api.app import create_app, reset_cached_settings_for_tests
+from recklock.api.settings import ApiSettings
+from recklock.auth.service import create_api_key, hash_api_key
+from recklock.db import models as m
+from recklock.db.session import create_engine_from_settings
 
 from test_api import _auth, _bootstrap_registry
 

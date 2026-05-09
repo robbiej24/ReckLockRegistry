@@ -20,7 +20,7 @@ Scores are integers on **[0, 1000]** derived from fixed weights:
 
 - **Baseline** starts at **750** (trusted band when no adverse signals exist).
 - **Successful verified actions** add a **small capped bonus** (reward steady compliant execution).
-- **Denials**, **failed verifications**, **policy violations**, **tamper signals**, & **approval-heavy workloads** reduce the score using explicit arithmetic (see `agenttrust/trust.py`).
+- **Denials**, **failed verifications**, **policy violations**, **tamper signals**, & **approval-heavy workloads** reduce the score using explicit arithmetic (see `recklock/trust.py`).
 - **Repeated policy violations** add **extra penalty** beyond the first violation.
 - **Incidents** apply severity weights (**low → critical**) so executive incidents move scores sharply.
 
@@ -40,4 +40,4 @@ Phase 2E is a **foundation**: richer reputation graphs, federation, & insurer-fa
 - `recklock-registry list-trust-profiles` — print latest snapshot per `agent_id`.
 - `recklock-registry record-incident path/to/incident.yaml` — append an incident & refresh the affected profile.
 
-Default paths are `trust_data/trust_profiles.jsonl` & `trust_data/incidents.jsonl` (see `agenttrust.constants`).
+Default paths are `trust_data/trust_profiles.jsonl` & `trust_data/incidents.jsonl` (see `recklock.constants`).

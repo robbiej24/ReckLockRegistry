@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pytest
 
-from agenttrust.discovery.telemetry import (
+from recklock.discovery.telemetry import (
     observation_mode_enabled,
     record_agent_observation,
     redact_metadata,
@@ -17,7 +17,7 @@ from agenttrust.discovery.telemetry import (
 
 
 def test_no_op_when_observation_mode_disabled(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("AGENTTRUST_OBSERVATION_MODE", raising=False)
+    monkeypatch.delenv("RECKLOCK_OBSERVATION_MODE", raising=False)
     log = tmp_path / "observation_events.jsonl"
     record_agent_observation(
         "agt_test_abcd1234",
@@ -29,7 +29,7 @@ def test_no_op_when_observation_mode_disabled(tmp_path: Path, monkeypatch: pytes
 
 
 def test_records_when_enabled(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("AGENTTRUST_OBSERVATION_MODE", "true")
+    monkeypatch.setenv("RECKLOCK_OBSERVATION_MODE", "true")
     log = tmp_path / "observation_events.jsonl"
     record_agent_observation(
         "agt_test_abcd1234",
@@ -51,7 +51,7 @@ def test_redacts_secret_looking_metadata() -> None:
 
 
 def test_resolve_observation_log_path_env(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("AGENTTRUST_EVIDENCE_DIR", str(tmp_path))
+    monkeypatch.setenv("RECKLOCK_EVIDENCE_DIR", str(tmp_path))
     p = resolve_observation_log_path()
     assert p.name == "observation_events.jsonl"
     assert p.parent.resolve() == tmp_path.resolve()
@@ -61,7 +61,7 @@ def test_logging_failure_does_not_raise(
     tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setenv("AGENTTRUST_OBSERVATION_MODE", "true")
+    monkeypatch.setenv("RECKLOCK_OBSERVATION_MODE", "true")
     bad_path = tmp_path / "nope" / "missing" / "nested" / "log.jsonl"
 
     def boom_open(*args: object, **kwargs: object) -> object:
@@ -76,6 +76,6 @@ def test_logging_failure_does_not_raise(
 
 
 def test_observation_mode_enabled_truthy() -> None:
-    os.environ["AGENTTRUST_OBSERVATION_MODE"] = "1"
+    os.environ["RECKLOCK_OBSERVATION_MODE"] = "1"
     assert observation_mode_enabled() is True
-    del os.environ["AGENTTRUST_OBSERVATION_MODE"]
+    del os.environ["RECKLOCK_OBSERVATION_MODE"]

@@ -7,8 +7,8 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from agenttrust.cli import app
-from agenttrust.policy import (
+from recklock.cli import app
+from recklock.policy import (
     ActionRequest,
     Policy,
     Rule,

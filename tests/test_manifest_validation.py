@@ -5,7 +5,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from agenttrust.manifest import load_manifest, validate_manifest
+from recklock.manifest import load_manifest, validate_manifest
 
 
 def test_valid_manifest_passes(example_manifest: Path) -> None:

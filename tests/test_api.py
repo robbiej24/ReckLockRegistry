@@ -9,17 +9,17 @@ import pytest
 import httpx
 from fastapi.testclient import TestClient
 
-from agenttrust.api.app import create_app, reset_cached_settings_for_tests
-from agenttrust.api.settings import ApiSettings
-from agenttrust.approvals import deterministic_approval_id
-from agenttrust.auth.service import create_api_key
-from agenttrust.db.init_db import init_database
-from agenttrust.db.repositories import create_approval_request_db
-from agenttrust.db.session import create_engine_from_settings
+from recklock.api.app import create_app, reset_cached_settings_for_tests
+from recklock.api.settings import ApiSettings
+from recklock.approvals import deterministic_approval_id
+from recklock.auth.service import create_api_key
+from recklock.db.init_db import init_database
+from recklock.db.repositories import create_approval_request_db
+from recklock.db.session import create_engine_from_settings
 from sqlalchemy.orm import sessionmaker
-from agenttrust.gateway import ExecutionRequest, RegistryIndex
-from agenttrust.policy import Policy, Rule, RuleConditions
-from agenttrust.registry import IndexAgentEntry
+from recklock.gateway import ExecutionRequest, RegistryIndex
+from recklock.policy import Policy, Rule, RuleConditions
+from recklock.registry import IndexAgentEntry
 
 MANIFEST_YAML = """
 agent_id: agt_api-test_a1b2c3d4
@@ -134,7 +134,7 @@ def test_health(client: TestClient) -> None:
     assert r.status_code == 200
     body = r.json()
     assert body["status"] == "ok"
-    assert body["service"] == "agenttrust-api"
+    assert body["service"] == "recklock-api"
 
 
 def test_list_agents(client: TestClient, admin_token: str) -> None:

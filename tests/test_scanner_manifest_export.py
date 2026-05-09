@@ -4,11 +4,10 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import yaml
 
-from agenttrust.manifest import AgentManifest
-from agenttrust.scanner import scan_repository
-from agenttrust.scanner.manifest_export import (
+from recklock.manifest import AgentManifest
+from recklock.scanner import scan_repository
+from recklock.scanner.manifest_export import (
     EXPORTABLE_ACTIONS,
     build_manifest_dict,
     compute_agent_id,

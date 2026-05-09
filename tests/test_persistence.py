@@ -9,12 +9,12 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 
-from agenttrust.api.app import create_app, reset_cached_settings_for_tests
-from agenttrust.api.settings import ApiSettings
-from agenttrust.approvals import deterministic_approval_id
-from agenttrust.audit import AuditEvent
-from agenttrust.db.init_db import init_database
-from agenttrust.db.repositories import (
+from recklock.api.app import create_app, reset_cached_settings_for_tests
+from recklock.api.settings import ApiSettings
+from recklock.approvals import deterministic_approval_id
+from recklock.audit import AuditEvent
+from recklock.db.init_db import init_database
+from recklock.db.repositories import (
     append_audit_event,
     approve_request_db,
     create_approval_request_db,
@@ -24,8 +24,8 @@ from agenttrust.db.repositories import (
     store_execution_response,
     upsert_trust_profile,
 )
-from agenttrust.db.session import create_engine_from_settings
-from agenttrust.gateway import ExecutionRequest, ExecutionResponse
+from recklock.db.session import create_engine_from_settings
+from recklock.gateway import ExecutionRequest, ExecutionResponse
 
 
 def _sample_audit(agent_id: str = "agt_test") -> AuditEvent:
@@ -69,7 +69,7 @@ def test_audit_roundtrip(db_settings: ApiSettings) -> None:
         assert sealed.event_hash
 
     with Session() as session:
-        from agenttrust.db.repositories import list_audit_events
+        from recklock.db.repositories import list_audit_events
 
         rows = list_audit_events(session)
         assert len(rows) == 1
@@ -104,7 +104,7 @@ def test_approval_create_update(db_settings: ApiSettings) -> None:
 
 
 def test_trust_profile_update(db_settings: ApiSettings) -> None:
-    from agenttrust.trust import TrustProfile
+    from recklock.trust import TrustProfile
 
     engine = create_engine_from_settings(db_settings)
     Session = sessionmaker(bind=engine, future=True)
@@ -156,7 +156,7 @@ def test_execution_persist(db_settings: ApiSettings) -> None:
         session.commit()
 
     with Session() as session:
-        from agenttrust.db.repositories import list_execution_pairs
+        from recklock.db.repositories import list_execution_pairs
 
         pairs = list_execution_pairs(session)
         assert len(pairs) == 1

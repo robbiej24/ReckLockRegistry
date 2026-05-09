@@ -32,7 +32,7 @@ Treat these as **secrets**, never as plain ConfigMaps in Git:
 
 - `DATABASE_URL` & database credentials.
 - Raw API keys shown once at issuance (operators must store them in a vault or password manager).
-- Connector configuration tokens when real connectors are enabled (`AGENTTRUST_ENABLE_REAL_CONNECTORS=true`).
+- Connector configuration tokens when real connectors are enabled (`RECKLOCK_ENABLE_REAL_CONNECTORS=true`).
 
 Mount secrets via Kubernetes Secrets, Docker secrets, systemd credentials, or your centralized vault with sidecar injection — ReckLock Registry reads standard environment variables.
 

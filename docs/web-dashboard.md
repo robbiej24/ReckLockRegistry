@@ -8,7 +8,7 @@ Enterprise buyers need evidence that controls are **actually enforced**, not onl
 
 ## How to run the dashboard
 
-Start the API server the same way you run ReckLock Registry today (for example `uvicorn agenttrust.api.app:app` from the package root with `AGENTTRUST_*` env vars set). Then open:
+Start the API server the same way you run ReckLock Registry today (for example `uvicorn recklock.api.app:app` from the package root with `RECKLOCK_*` env vars set). Then open:
 
 - **Overview:** `/ui/`
 - **Static assets:** `/ui/static/app.css`

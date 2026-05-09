@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from agenttrust.scanner import scan_repository
-from agenttrust.scanner.detectors import detect_signals_for_file
-from agenttrust.scanner.redaction import redact_line, redact_snippet
+from recklock.scanner import scan_repository
+from recklock.scanner.detectors import detect_signals_for_file
+from recklock.scanner.redaction import redact_line, redact_snippet
 
 
 def _signal_names(text: str, name: str = "x.py") -> list[str]:

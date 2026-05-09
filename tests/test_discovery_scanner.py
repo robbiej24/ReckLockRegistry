@@ -4,9 +4,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
-from agenttrust.discovery.scanner import scan_repository
+from recklock.discovery.scanner import scan_repository
 
 
 def test_detects_openai_usage(tmp_path: Path) -> None:

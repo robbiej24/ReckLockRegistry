@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from agenttrust.registry import build_index
+from recklock.registry import build_index
 
 
 def test_build_index_creates_index_with_one_agent(tmp_path: Path, example_manifest: Path) -> None:

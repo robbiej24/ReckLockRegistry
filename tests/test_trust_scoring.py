@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import datetime, timezone
 
-from agenttrust.trust import (
+from recklock.trust import (
     IncidentRecord,
     TrustProfile,
     calculate_trust_score,
@@ -17,7 +17,7 @@ from agenttrust.trust import (
     record_incident,
     update_trust_profile,
 )
-from agenttrust.trust import IncidentYamlDocument
+from recklock.trust import IncidentYamlDocument
 
 
 def test_calculate_trust_score_deterministic() -> None:

@@ -6,9 +6,9 @@ from pathlib import Path
 
 import yaml
 
-from agenttrust.scanner import scan_repository
-from agenttrust.scanner.cli import import_scan_manifests, run_scan
-from agenttrust.scanner.manifest_export import compute_agent_id
+from recklock.scanner import scan_repository
+from recklock.scanner.cli import import_scan_manifests, run_scan
+from recklock.scanner.manifest_export import compute_agent_id
 
 
 def test_scan_emits_report_for_simple_repo(tmp_path: Path) -> None:

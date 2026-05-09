@@ -10,17 +10,17 @@ ReckLock Registry ships as a Python package (`recklock-registry`) with a Typer C
 
 ## Configuration
 
-Environment variables use the `AGENTTRUST_` prefix unless noted. Common keys:
+Environment variables use the `RECKLOCK_` prefix unless noted. Common keys:
 
 | Variable | Purpose |
 |----------|---------|
-| `DATABASE_URL` | Preferred SQLAlchemy URL (also accepts `AGENTTRUST_DATABASE_URL`). Use `postgresql+psycopg://…` for PostgreSQL. |
-| `AGENTTRUST_ENV` | Short environment label (`production`, `staging`, …). |
-| `AGENTTRUST_API_HOST` | Bind address for `recklock-registry serve` (for example `0.0.0.0` in containers). |
-| `AGENTTRUST_API_PORT` | TCP port for `recklock-registry serve`. |
+| `DATABASE_URL` | Preferred SQLAlchemy URL (also accepts `RECKLOCK_DATABASE_URL`). Use `postgresql+psycopg://…` for PostgreSQL. |
+| `RECKLOCK_ENV` | Short environment label (`production`, `staging`, …). |
+| `RECKLOCK_API_HOST` | Bind address for `recklock-registry serve` (for example `0.0.0.0` in containers). |
+| `RECKLOCK_API_PORT` | TCP port for `recklock-registry serve`. |
 | `RECKLOCK_REGISTRY_ROOT` | Filesystem root for manifests, `registry/index.json`, audit logs, & related paths. |
-| `AGENTTRUST_ENABLE_REAL_CONNECTORS` | When `true`, connectors may perform real external side effects (default off). |
-| `AGENTTRUST_SECRET_KEY` | Reserved for future signing use; optional today. |
+| `RECKLOCK_ENABLE_REAL_CONNECTORS` | When `true`, connectors may perform real external side effects (default off). |
+| `RECKLOCK_SECRET_KEY` | Reserved for future signing use; optional today. |
 
 See `.env.example` for a starting point.
 
@@ -31,7 +31,7 @@ See `.env.example` for a starting point.
 3. **Apply schema idempotently**:
 
    ```bash
-   export DATABASE_URL='postgresql+psycopg://user:pass@host:5432/agenttrust'
+   export DATABASE_URL='postgresql+psycopg://user:pass@host:5432/recklock'
    recklock-registry init-db
    ```
 
@@ -52,8 +52,8 @@ From the `recklock-registry` directory:
 ```bash
 docker build -t recklock-registry:local .
 docker run --rm -p 8080:8080 \
-  -e DATABASE_URL='sqlite:////tmp/agenttrust.db' \
-  -e AGENTTRUST_API_HOST=0.0.0.0 \
+  -e DATABASE_URL='sqlite:////tmp/recklock.db' \
+  -e RECKLOCK_API_HOST=0.0.0.0 \
   -e RECKLOCK_REGISTRY_ROOT=/tmp/registry \
   recklock-registry:local
 ```

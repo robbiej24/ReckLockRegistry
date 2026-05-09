@@ -7,12 +7,12 @@ Phase 4A adds **opt-in, non-blocking** hooks that append small JSON lines to an 
 Set:
 
 ```bash
-export AGENTTRUST_OBSERVATION_MODE=true
+export RECKLOCK_OBSERVATION_MODE=true
 ```
 
 When this is unset or false, the Python helpers (`record_agent_observation`, `record_agent_error`, `record_agent_external_call`) **no-op** unless you pass `force=True` (used internally by the API when observation is enabled server-side).
 
-The REST API still checks **`AGENTTRUST_OBSERVATION_MODE` via settings** (`observation_mode` on `ApiSettings`): when false, telemetry POST endpoints acknowledge the request but **do not persist** rows.
+The REST API still checks **`RECKLOCK_OBSERVATION_MODE` via settings** (`observation_mode` on `ApiSettings`): when false, telemetry POST endpoints acknowledge the request but **do not persist** rows.
 
 ## Where events go
 
@@ -25,7 +25,7 @@ under the current working directory (CLI) or under `registry_root/evidence` when
 You may override the directory with:
 
 ```bash
-export AGENTTRUST_EVIDENCE_DIR=/path/to/evidence
+export RECKLOCK_EVIDENCE_DIR=/path/to/evidence
 ```
 
 ## What gets logged
@@ -47,7 +47,7 @@ Each line is a JSON object with:
 Instrument code paths manually when safe:
 
 ```python
-from agenttrust.discovery.telemetry import record_agent_observation
+from recklock.discovery.telemetry import record_agent_observation
 
 record_agent_observation(
     "agt_my-agent_deadbeef",
@@ -78,7 +78,7 @@ When running `recklock-registry serve` with observation mode enabled & appropria
 - `GET /evidence/report?days=7`
 - `GET /discovery/candidates`
 
-RBAC: append routes require `observation.append`; read routes require `observation.read` (see role matrices in `agenttrust/auth/service.py`).
+RBAC: append routes require `observation.append`; read routes require `observation.read` (see role matrices in `recklock/auth/service.py`).
 
 ## Next steps after one week
 

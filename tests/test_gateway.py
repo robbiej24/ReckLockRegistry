@@ -8,10 +8,10 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from agenttrust.cli import app
-from agenttrust.gateway import ExecutionRequest, execute_request, load_registry_index
-from agenttrust.policy import Policy, Rule, RuleConditions
-from agenttrust.registry import IndexAgentEntry, RegistryIndex
+from recklock.cli import app
+from recklock.gateway import ExecutionRequest, execute_request, load_registry_index
+from recklock.policy import Policy, Rule, RuleConditions
+from recklock.registry import IndexAgentEntry, RegistryIndex
 
 FIXED_TS = datetime(2026, 5, 8, 16, 0, 0, tzinfo=timezone.utc)
 

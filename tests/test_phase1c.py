@@ -3,7 +3,7 @@
 import json
 from pathlib import Path
 
-from agenttrust.crypto import (
+from recklock.crypto import (
     generate_keypair,
     load_private_key,
     save_private_key,
@@ -11,8 +11,8 @@ from agenttrust.crypto import (
     verify_manifest,
     verify_manifest_model,
 )
-from agenttrust.manifest import load_manifest
-from agenttrust.registry import build_index
+from recklock.manifest import load_manifest
+from recklock.registry import build_index
 
 
 def _manifest_yaml(agent_slug: str) -> str:

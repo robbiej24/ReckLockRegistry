@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ include "agenttrust.fullname" . }}-config
+  name: {{ include "recklock.fullname" . }}-config
   labels:
-    {{- include "agenttrust.labels" . | nindent 4 }}
+    {{- include "recklock.labels" . | nindent 4 }}
 data:
   {{- range $k, $v := .Values.env }}
   {{ $k }}: {{ $v | quote }}

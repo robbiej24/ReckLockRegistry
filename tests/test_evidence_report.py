@@ -6,7 +6,7 @@ import json
 from datetime import datetime, timezone
 from pathlib import Path
 
-from agenttrust.discovery.evidence import (
+from recklock.discovery.evidence import (
     build_evidence_report,
     deterministic_recommendations,
     write_evidence_reports,

@@ -27,4 +27,4 @@ Phase 2A evaluates whether an action is allowed, denied, or requires approval. P
 - `recklock-registry append-audit-event path/to/event.yaml` — append one YAML-described event (hashes optional; the CLI completes the chain).
 - `recklock-registry verify-audit-log` — verify per-event digests & hash continuity (defaults to `audit_logs/events.log`; override with `--log`).
 
-See `agenttrust/audit.py` for the `AuditEvent` schema & verification helpers.
+See `recklock/audit.py` for the `AuditEvent` schema & verification helpers.

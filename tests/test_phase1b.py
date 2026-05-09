@@ -3,8 +3,7 @@
 import json
 from pathlib import Path
 
-from agenttrust.manifest import (
-    AgentManifest,
+from recklock.manifest import (
     canonicalize_manifest,
     load_manifest,
     write_manifest_schema,

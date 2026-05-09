@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from agenttrust.scanner import scan_repository
-from agenttrust.scanner.report import (
+from recklock.scanner import scan_repository
+from recklock.scanner.report import (
     DEFAULT_JSON_FILENAME,
     DEFAULT_MARKDOWN_FILENAME,
     render_markdown_report,

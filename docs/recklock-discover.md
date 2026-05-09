@@ -200,7 +200,7 @@ the source.
 The scanner is designed to surface dangerous code paths without leaking
 the credentials it finds.
 
-- All matched lines are passed through `agenttrust.scanner.redaction.redact_line`
+- All matched lines are passed through `recklock.scanner.redaction.redact_line`
   before being placed in a finding.
 - Env-style assignments (`API_KEY=...`, `STRIPE_SECRET_KEY=...`,
   `DATABASE_URL=...`), bearer tokens, common provider key formats

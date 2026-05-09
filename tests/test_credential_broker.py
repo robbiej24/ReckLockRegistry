@@ -11,19 +11,19 @@ from fastapi.testclient import TestClient
 from sqlalchemy import select
 from sqlalchemy.orm import sessionmaker
 
-from agenttrust.api.app import create_app, reset_cached_settings_for_tests
-from agenttrust.api.settings import ApiSettings
-from agenttrust.approvals import deterministic_approval_id
-from agenttrust.auth.service import create_api_key
-from agenttrust.credentials.broker import issue_credential, revoke_credential, verify_credential
-from agenttrust.credentials.models import CredentialRequest
-from agenttrust.db.init_db import init_database
-from agenttrust.db import models as m
-from agenttrust.db.repositories import approve_request_db, list_audit_events
-from agenttrust.db.session import create_engine_from_settings
-from agenttrust.gateway import RegistryIndex
-from agenttrust.policy import Policy, Rule, RuleConditions
-from agenttrust.registry import IndexAgentEntry
+from recklock.api.app import create_app, reset_cached_settings_for_tests
+from recklock.api.settings import ApiSettings
+from recklock.approvals import deterministic_approval_id
+from recklock.auth.service import create_api_key
+from recklock.credentials.broker import issue_credential, revoke_credential, verify_credential
+from recklock.credentials.models import CredentialRequest
+from recklock.db.init_db import init_database
+from recklock.db import models as m
+from recklock.db.repositories import approve_request_db, list_audit_events
+from recklock.db.session import create_engine_from_settings
+from recklock.gateway import RegistryIndex
+from recklock.policy import Policy, Rule, RuleConditions
+from recklock.registry import IndexAgentEntry
 
 from test_api import _auth
 

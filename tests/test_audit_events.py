@@ -8,7 +8,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from agenttrust.audit import (
+from recklock.audit import (
     AuditEvent,
     append_event,
     canonical_dict_for_hash,
@@ -19,7 +19,7 @@ from agenttrust.audit import (
     verify_event_chain,
     verify_log_integrity,
 )
-from agenttrust.cli import app
+from recklock.cli import app
 
 FIXED_TS = datetime(2026, 5, 8, 14, 30, 0, tzinfo=timezone.utc)
 

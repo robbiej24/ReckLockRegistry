@@ -25,10 +25,10 @@ dependencies = [
 ]
 
 [project.scripts]
-recklock-registry = "agenttrust.cli:app"
+recklock-registry = "recklock.cli:app"
 
 [tool.hatch.build.targets.wheel]
-packages = ["agenttrust"]
+packages = ["recklock"]
 
 [tool.hatch.build.targets.wheel.force-include]
 "db" = "db"

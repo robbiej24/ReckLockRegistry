@@ -11,16 +11,16 @@ from fastapi.testclient import TestClient
 from sqlalchemy.orm import sessionmaker
 from typer.testing import CliRunner
 
-from agenttrust.api.app import create_app, reset_cached_settings_for_tests
-from agenttrust.api.settings import ApiSettings
-from agenttrust.auth.service import create_api_key
-from agenttrust.cli import app as cli_app
-from agenttrust.connectors.base import real_connectors_enabled
-from agenttrust.connectors.registry import get_connector, list_connector_descriptors
-from agenttrust.db.session import create_engine_from_settings
-from agenttrust.gateway import ExecutionRequest, execute_request, load_registry_index
-from agenttrust.policy import Policy, Rule, RuleConditions
-from agenttrust.registry import IndexAgentEntry, RegistryIndex
+from recklock.api.app import create_app, reset_cached_settings_for_tests
+from recklock.api.settings import ApiSettings
+from recklock.auth.service import create_api_key
+from recklock.cli import app as cli_app
+from recklock.connectors.base import real_connectors_enabled
+from recklock.connectors.registry import get_connector, list_connector_descriptors
+from recklock.db.session import create_engine_from_settings
+from recklock.gateway import ExecutionRequest, execute_request, load_registry_index
+from recklock.policy import Policy, Rule, RuleConditions
+from recklock.registry import IndexAgentEntry, RegistryIndex
 
 from test_api import _auth, _bootstrap_registry
 
@@ -58,7 +58,7 @@ def test_registry_lists_connectors() -> None:
 def test_mock_connector_dry_run() -> None:
     m = get_connector("mock")
     assert m is not None
-    from agenttrust.connectors.base import ConnectorRequest
+    from recklock.connectors.base import ConnectorRequest
 
     req = ConnectorRequest(
         connector_id="mock",
@@ -75,11 +75,11 @@ def test_mock_connector_dry_run() -> None:
 
 
 def test_disabled_real_connector_execution_blocked(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.delenv("AGENTTRUST_ENABLE_REAL_CONNECTORS", raising=False)
+    monkeypatch.delenv("RECKLOCK_ENABLE_REAL_CONNECTORS", raising=False)
     assert real_connectors_enabled() is False
     gh = get_connector("github")
     assert gh is not None
-    from agenttrust.connectors.base import ConnectorRequest
+    from recklock.connectors.base import ConnectorRequest
 
     req = ConnectorRequest(
         connector_id="github",

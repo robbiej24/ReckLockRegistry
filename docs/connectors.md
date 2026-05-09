@@ -58,7 +58,7 @@ Denied policy outcomes **do not** invoke connectors.
 Non-mock external execution is gated globally:
 
 ```bash
-export AGENTTRUST_ENABLE_REAL_CONNECTORS=true
+export RECKLOCK_ENABLE_REAL_CONNECTORS=true
 ```
 
 Until set, GitHub / Slack / Email `execute()` responses report that real execution is disabled. **No payment movement, bank APIs, or cloud credential brokering** are implemented in this phase.

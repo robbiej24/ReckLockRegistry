@@ -7,13 +7,13 @@ The ReckLock Registry API persists operational data in a relational database usi
 | Input | Purpose |
 |-------|---------|
 | `DATABASE_URL` | Primary SQLAlchemy URL (wins over defaults when set). |
-| `AGENTTRUST_DATABASE_URL` | Prefixed alternative when using `ApiSettings`. |
-| `AGENTTRUST_DATABASE_URL` field default | Falls back to `sqlite:///./agenttrust.local.db` when neither env var is set. |
+| `RECKLOCK_DATABASE_URL` | Prefixed alternative when using `ApiSettings`. |
+| `RECKLOCK_DATABASE_URL` field default | Falls back to `sqlite:///./recklock.local.db` when neither env var is set. |
 
 Runtime URL resolution order:
 
 1. `DATABASE_URL`
-2. `AGENTTRUST_DATABASE_URL`
+2. `RECKLOCK_DATABASE_URL`
 3. `ApiSettings.database_url` (default SQLite file in the current working directory)
 
 ## Local SQLite fallback
@@ -24,7 +24,7 @@ For development and tests, SQLite is the default. No separate database server is
 
 Set `DATABASE_URL` to a PostgreSQL URL, for example:
 
-`postgresql+psycopg://user:pass@host:5432/agenttrust`
+`postgresql+psycopg://user:pass@host:5432/recklock`
 
 Install a PostgreSQL driver (for example `psycopg[binary]`) alongside this package. The bundled `db/schema.sql` uses portable types (`TEXT`, `INTEGER`) so the same file applies to PostgreSQL and SQLite.
 

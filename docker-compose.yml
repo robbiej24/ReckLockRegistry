@@ -2,13 +2,13 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      POSTGRES_USER: agenttrust
-      POSTGRES_PASSWORD: agenttrust
-      POSTGRES_DB: agenttrust
+      POSTGRES_USER: recklock
+      POSTGRES_PASSWORD: recklock
+      POSTGRES_DB: recklock
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U agenttrust -d agenttrust"]
+      test: ["CMD-SHELL", "pg_isready -U recklock -d recklock"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -21,13 +21,13 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+psycopg://agenttrust:agenttrust@postgres:5432/agenttrust
-      AGENTTRUST_ENV: production
-      AGENTTRUST_API_HOST: 0.0.0.0
-      AGENTTRUST_API_PORT: "8080"
+      DATABASE_URL: postgresql+psycopg://recklock:recklock@postgres:5432/recklock
+      RECKLOCK_ENV: production
+      RECKLOCK_API_HOST: 0.0.0.0
+      RECKLOCK_API_PORT: "8080"
       # Ephemeral path writable by the container non-root user (mount a volume here for production registry files).
       RECKLOCK_REGISTRY_ROOT: /tmp/recklock-registry
-      AGENTTRUST_ENABLE_REAL_CONNECTORS: "false"
+      RECKLOCK_ENABLE_REAL_CONNECTORS: "false"
     ports:
       - "8080:8080"
     healthcheck:

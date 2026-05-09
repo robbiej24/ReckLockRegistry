@@ -63,4 +63,4 @@ Runs discovery, registers drafts, prints JSON summary counts (including high / c
 
 1. Open `evidence/discovered_agents.json` & sort by `risk_level_guess` & `confidence`.
 2. For each draft under `registry/discovered/`, confirm whether the file represents a real agent or automation & adjust naming, scopes, & risk before signing anything in a later phase.
-3. Keep `AGENTTRUST_OBSERVATION_MODE` enabled only while you intend to collect telemetry (see `docs/passive-telemetry.md`).
+3. Keep `RECKLOCK_OBSERVATION_MODE` enabled only while you intend to collect telemetry (see `docs/passive-telemetry.md`).

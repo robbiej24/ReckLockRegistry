@@ -4,12 +4,12 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from agenttrust.discovery.manifest_generator import (
+from recklock.discovery.manifest_generator import (
     build_manifest_dict,
     compute_agent_id,
     write_manifest_draft,
 )
-from agenttrust.discovery.models import DiscoveredAgentCandidate
+from recklock.discovery.models import DiscoveredAgentCandidate
 
 
 def test_creates_valid_manifest_dict() -> None:

@@ -22,12 +22,12 @@ Optional: fix the working root so relative paths (`registry/index.json`, `audit_
 recklock-registry serve --host 127.0.0.1 --port 8080 --registry-root /path/to/project
 ```
 
-Environment overrides use the `AGENTTRUST_` prefix (see `agenttrust.api.settings.ApiSettings`), for example `RECKLOCK_REGISTRY_ROOT`, `AGENTTRUST_AUDIT_LOG_PATH`, `AGENTTRUST_APPROVAL_LOG_PATH`, `AGENTTRUST_TRUST_PROFILES_PATH`, `AGENTTRUST_INCIDENTS_PATH`, `AGENTTRUST_INDEX_PATH`.
+Environment overrides use the `RECKLOCK_` prefix (see `recklock.api.settings.ApiSettings`), for example `RECKLOCK_REGISTRY_ROOT`, `RECKLOCK_AUDIT_LOG_PATH`, `RECKLOCK_APPROVAL_LOG_PATH`, `RECKLOCK_TRUST_PROFILES_PATH`, `RECKLOCK_INCIDENTS_PATH`, `RECKLOCK_INDEX_PATH`.
 
 You can also run Uvicorn directly on the factory-built app (uses environment-driven settings when `app.state` is not pre-set):
 
 ```bash
-uvicorn agenttrust.api.app:app --host 127.0.0.1 --port 8080
+uvicorn recklock.api.app:app --host 127.0.0.1 --port 8080
 ```
 
 ## Endpoints

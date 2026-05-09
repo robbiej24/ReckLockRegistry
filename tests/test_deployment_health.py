@@ -2,15 +2,14 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
 
-from agenttrust.api.app import create_app, reset_cached_settings_for_tests
-from agenttrust.api.settings import ApiSettings
-from agenttrust.db.init_db import init_database
+from recklock.api.app import create_app, reset_cached_settings_for_tests
+from recklock.api.settings import ApiSettings
+from recklock.db.init_db import init_database
 
 
 @pytest.fixture(autouse=True)
@@ -38,9 +37,9 @@ def test_health_and_ready(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> No
 
 
 def test_api_settings_reads_bind_env(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setenv("AGENTTRUST_API_HOST", "10.0.0.2")
-    monkeypatch.setenv("AGENTTRUST_API_PORT", "9090")
-    monkeypatch.setenv("AGENTTRUST_ENV", "staging")
+    monkeypatch.setenv("RECKLOCK_API_HOST", "10.0.0.2")
+    monkeypatch.setenv("RECKLOCK_API_PORT", "9090")
+    monkeypatch.setenv("RECKLOCK_ENV", "staging")
     reset_cached_settings_for_tests()
     s = ApiSettings()
     assert s.api_host == "10.0.0.2"
@@ -49,9 +48,9 @@ def test_api_settings_reads_bind_env(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def test_database_url_prefers_plain_database_url(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
-    from agenttrust.db.session import effective_database_url
+    from recklock.db.session import effective_database_url
 
     monkeypatch.setenv("DATABASE_URL", "sqlite:///" + str(tmp_path / "a.db"))
-    monkeypatch.setenv("AGENTTRUST_DATABASE_URL", "sqlite:///" + str(tmp_path / "b.db"))
+    monkeypatch.setenv("RECKLOCK_DATABASE_URL", "sqlite:///" + str(tmp_path / "b.db"))
     s = ApiSettings()
     assert effective_database_url(s).endswith("a.db")

@@ -1,25 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "agenttrust.fullname" . }}
+  name: {{ include "recklock.fullname" . }}
   labels:
-    {{- include "agenttrust.labels" . | nindent 4 }}
+    {{- include "recklock.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      {{- include "agenttrust.selectorLabels" . | nindent 6 }}
+      {{- include "recklock.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "agenttrust.selectorLabels" . | nindent 8 }}
+        {{- include "recklock.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: agenttrust
+        - name: recklock
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
@@ -27,13 +27,13 @@ spec:
               containerPort: {{ .Values.service.port }}
           envFrom:
             - configMapRef:
-                name: {{ include "agenttrust.fullname" . }}-config
+                name: {{ include "recklock.fullname" . }}-config
           {{- if .Values.database.url }}
           env:
             - name: DATABASE_URL
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "agenttrust.fullname" . }}-db
+                  name: {{ include "recklock.fullname" . }}-db
                   key: database-url
           {{- end }}
           volumeMounts:
