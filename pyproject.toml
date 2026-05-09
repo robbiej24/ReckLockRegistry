@@ -24,6 +24,12 @@ dependencies = [
   "jinja2>=3.1",
 ]
 
+[project.urls]
+Homepage = "https://github.com/robbiej24/ReckLockRegistry"
+Documentation = "https://github.com/robbiej24/ReckLockRegistry/blob/main/README.md"
+Repository = "https://github.com/robbiej24/ReckLockRegistry"
+Issues = "https://github.com/robbiej24/ReckLockRegistry/issues"
+
 [project.scripts]
 recklock-registry = "recklock.cli:app"
 
