@@ -17,21 +17,6 @@ from recklock.constants import (
     DEFAULT_TRUST_PROFILES_PATH,
 )
 
-# Prefer RECKLOCK_*; mirror legacy AGENTTRUST_* and RECKLOCKBLOCK_* when the new name is absent.
-for _k, _v in list(os.environ.items()):
-    if not _k.startswith("AGENTTRUST_"):
-        continue
-    _dest = "RECKLOCK_" + _k[len("AGENTTRUST_") :]
-    if _dest not in os.environ:
-        os.environ[_dest] = _v
-
-for _k, _v in list(os.environ.items()):
-    if not _k.startswith("RECKLOCKBLOCK_"):
-        continue
-    _dest = "RECKLOCK_" + _k[len("RECKLOCKBLOCK_") :]
-    if _dest not in os.environ:
-        os.environ[_dest] = _v
-
 
 class ApiSettings(BaseSettings):
     """Resolved from environment with prefix ``RECKLOCK_``."""

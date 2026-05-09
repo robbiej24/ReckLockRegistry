@@ -63,14 +63,44 @@ def run_scan(
     manifest_dir: Path | None = None
     manifest_results: list[tuple[Path, bool, str]] = []
     if export_manifests_flag:
-        manifest_dir = (manifest_export_dir or (out_dir / DEFAULT_EXPORT_DIRNAME)).resolve()
-        manifest_results = export_manifests(
-            report.findings,
-            manifest_dir,
-            scanner_version=SCANNER_VERSION,
-            actions=EXPORTABLE_ACTIONS,
+        manifest_dir, manifest_results = export_registry_manifests(
+            report,
+            output_dir=out_dir,
+            manifest_export_dir=manifest_export_dir,
         )
     return report, json_path, md_path, manifest_dir, manifest_results
+
+
+def registry_candidate_count(report: ScannerReport) -> int:
+    """Count findings that can become ReckLock Registry manifest drafts."""
+    return sum(1 for finding in report.findings if finding.recommended_action in EXPORTABLE_ACTIONS)
+
+
+def registry_opt_in_prompt(count: int) -> str:
+    plural = "" if count == 1 else "s"
+    return (
+        f"ReckLock Discover found {count} AI agent{plural}. Add them to your ReckLock Registry so you can display:\n\n"
+        "- That you own them\n"
+        "- What their capabilities are\n"
+        "- Which risks they carry &\n"
+        "- Allow other people who want to license your agents to contact you?"
+    )
+
+
+def export_registry_manifests(
+    report: ScannerReport,
+    *,
+    output_dir: Path,
+    manifest_export_dir: Path | None = None,
+) -> tuple[Path, list[tuple[Path, bool, str]]]:
+    manifest_dir = (manifest_export_dir or (output_dir / DEFAULT_EXPORT_DIRNAME)).resolve()
+    manifest_results = export_manifests(
+        report.findings,
+        manifest_dir,
+        scanner_version=SCANNER_VERSION,
+        actions=EXPORTABLE_ACTIONS,
+    )
+    return manifest_dir, manifest_results
 
 
 def summarize_report_text(report: ScannerReport) -> str:

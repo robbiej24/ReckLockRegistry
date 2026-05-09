@@ -108,6 +108,7 @@ Default behavior:
 
 ```bash
 recklock-registry scan-repo PATH --output-dir reports/
+recklock-registry scan-repo PATH --add-to-registry
 recklock-registry scan-repo PATH --export-manifests
 recklock-registry scan-repo PATH --min-confidence medium
 recklock-registry scan-repo PATH --include "*.py,*.ts,.github/workflows/*.yml"
@@ -124,6 +125,19 @@ for every finding whose `recommended_action` is `register`, `govern`, or
 ```bash
 recklock-registry scan-repo /path/to/repo --export-manifests
 ```
+
+Local human runs can also opt in after the scan:
+
+> ReckLock Discover found 6 AI agents. Add them to your ReckLock Registry so you can display:
+>
+> - That you own them
+> - What their capabilities are
+> - Which risks they carry &
+> - Allow other people who want to license your agents to contact you?
+
+Choose yes, or pass `--add-to-registry`, to write draft manifests and copy
+them into `registry/discovered/`. Pass `--skip-registry` to explicitly skip.
+Non-interactive runs and `--format json` never prompt.
 
 Default output directory:
 

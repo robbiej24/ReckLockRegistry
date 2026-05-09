@@ -16,8 +16,6 @@ def effective_database_url(settings: ApiSettings) -> str:
     return (
         os.environ.get("DATABASE_URL")
         or os.environ.get("RECKLOCK_DATABASE_URL")
-        or os.environ.get("RECKLOCKBLOCK_DATABASE_URL")
-        or os.environ.get("AGENTTRUST_DATABASE_URL")
         or settings.database_url
     )
 

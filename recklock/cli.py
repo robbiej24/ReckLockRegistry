@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -52,8 +53,11 @@ from recklock.discovery.models import DiscoveredAgentCandidate
 from recklock.discovery.scanner import scan_repository
 from recklock.registry import build_index
 from recklock.scanner.cli import (
+    export_registry_manifests,
     import_scan_manifests as import_scan_manifests_fn,
     report_to_json as scanner_report_to_json,
+    registry_candidate_count,
+    registry_opt_in_prompt,
     run_scan as run_scanner,
     summarize_report_text as summarize_scanner_report,
 )
@@ -560,7 +564,7 @@ def record_incident_cmd(
         help="JSONL append-only incident log",
     ),
 ) -> None:
-    """Append one incident and upsert the affected agent trust profile."""
+    """Append one incident and upsert the affected ReckLock profile."""
     try:
         doc = load_incident_yaml(yaml_path)
         rec, profile = record_incident(
@@ -1074,10 +1078,20 @@ def scan_repo_cmd(
         "--export-manifests",
         help="Generate unsigned ReckLock Registry manifest drafts for register/govern/manual_review findings",
     ),
+    add_to_registry: bool | None = typer.Option(
+        None,
+        "--add-to-registry/--skip-registry",
+        help="Opt in or out of copying discovered agent manifests into registry/discovered",
+    ),
     manifest_dir: Path | None = typer.Option(
         None,
         "--manifest-dir",
         help="Directory for exported manifests (default: <output-dir>/recklock_manifest_exports)",
+    ),
+    registry_root: Path = typer.Option(
+        Path("."),
+        "--registry-root",
+        help="Working directory for the registry when adding manifests (default: current directory)",
     ),
     min_confidence: str | None = typer.Option(
         None,
@@ -1123,16 +1137,47 @@ def scan_repo_cmd(
             include=include,
             exclude=exclude,
             min_confidence=min_confidence,  # type: ignore[arg-type]
-            export_manifests_flag=export_manifests,
+            export_manifests_flag=export_manifests or add_to_registry is True,
             manifest_export_dir=manifest_dir,
         )
     except (FileNotFoundError, NotADirectoryError, OSError) as exc:
         typer.secho(str(exc), fg=typer.colors.RED, err=True)
         raise typer.Exit(code=1) from exc
 
+    should_add_to_registry = add_to_registry is True
     if output_format == "json":
+        if should_add_to_registry:
+            if manifest_export_dir is None:
+                manifest_export_dir, manifest_results = export_registry_manifests(
+                    report,
+                    output_dir=json_path.parent,
+                    manifest_export_dir=manifest_dir,
+                )
+            import_scan_manifests_fn(
+                export_dir=manifest_export_dir,
+                registry_root=registry_root,
+                rebuild_index=True,
+            )
         typer.echo(scanner_report_to_json(report))
         return
+
+    candidate_count = registry_candidate_count(report)
+    if add_to_registry is None and candidate_count > 0 and sys.stdin.isatty():
+        should_add_to_registry = typer.confirm(registry_opt_in_prompt(candidate_count), default=False)
+    if should_add_to_registry:
+        if manifest_export_dir is None:
+            manifest_export_dir, manifest_results = export_registry_manifests(
+                report,
+                output_dir=json_path.parent,
+                manifest_export_dir=manifest_dir,
+            )
+        import_summary = import_scan_manifests_fn(
+            export_dir=manifest_export_dir,
+            registry_root=registry_root,
+            rebuild_index=True,
+        )
+    else:
+        import_summary = None
 
     typer.echo(summarize_scanner_report(report))
     typer.echo(f"  json_report:   {json_path}")
@@ -1142,6 +1187,13 @@ def scan_repo_cmd(
         skipped = sum(1 for _, w, _ in manifest_results if not w)
         typer.echo(f"  manifests_written: {written} (skipped existing: {skipped})")
         typer.echo(f"  manifest_dir:  {manifest_export_dir}")
+    if import_summary is not None:
+        typer.echo(
+            "  registry_added: "
+            f"{import_summary['written']} "
+            f"(skipped existing: {len(import_summary['skipped'])}, invalid: {len(import_summary['invalid'])})"
+        )
+        typer.echo(f"  registry_discovered_dir: {import_summary['discovered_dir']}")
 
 
 @app.command("import-scan-manifests")
