@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Audit events</h1>
+<p class="lede">Recent sealed audit records (newest first).</p>
+{% if events %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Time</th>
+      <th>Event</th>
+      <th>Agent</th>
+      <th>Decision</th>
+      <th>Resource</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for e in events %}
+    <tr>
+      <td class="nowrap">{{ e.timestamp }}</td>
+      <td><code>{{ e.event_type }}</code></td>
+      <td><code>{{ e.agent_id }}</code></td>
+      <td>{{ e.decision }}</td>
+      <td>{{ e.resource_type }} / <code>{{ e.resource_id }}</code></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No audit events recorded yet.</p>
+{% endif %}
+{% endblock %}

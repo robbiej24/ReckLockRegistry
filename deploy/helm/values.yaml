@@ -1,0 +1,37 @@
+replicaCount: 1
+
+image:
+  repository: recklock-registry
+  tag: "0.1.0"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8080
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+  host: recklock-registry.local
+  tls:
+    enabled: false
+    secretName: ""
+
+resources: {}
+
+env:
+  AGENTTRUST_ENV: production
+  AGENTTRUST_API_HOST: "0.0.0.0"
+  AGENTTRUST_API_PORT: "8080"
+  RECKLOCK_REGISTRY_ROOT: "/data/registry"
+  AGENTTRUST_ENABLE_REAL_CONNECTORS: "false"
+
+# SQLAlchemy URL for PostgreSQL (postgresql+psycopg://…). Required for production-style installs.
+database:
+  url: ""
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10001
+  fsGroup: 10001

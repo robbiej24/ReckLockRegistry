@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Executions</h1>
+<p class="lede">Recent gateway decisions paired with stored responses.</p>
+{% if pairs %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Request</th>
+      <th>Agent</th>
+      <th>Capability</th>
+      <th>Decision</th>
+      <th>Reason</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for req, resp in pairs %}
+    <tr>
+      <td><code>{{ req.request_id }}</code></td>
+      <td><code>{{ req.agent_id }}</code></td>
+      <td>{{ req.capability }}</td>
+      <td><span class="pill">{{ resp.decision }}</span></td>
+      <td>{{ resp.reason }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No completed executions recorded yet.</p>
+{% endif %}
+{% endblock %}

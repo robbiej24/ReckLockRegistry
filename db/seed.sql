@@ -1,0 +1,12 @@
+-- Optional reference data for development (safe to run repeatedly).
+-- Example: uncomment to insert a demo policy row after adjusting ids.
+--
+-- INSERT INTO policies (policy_id, policy_json, enabled, created_at, updated_at)
+-- VALUES (
+--   'demo-open-reads',
+--   '{"policy_id":"demo-open-reads","enabled":true,"rules":[]}',
+--   1,
+--   datetime('now'),
+--   datetime('now')
+-- )
+-- ON CONFLICT DO NOTHING;

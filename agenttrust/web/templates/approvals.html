@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Approvals</h1>
+<p class="lede">Human-in-the-loop gates for sensitive actions.</p>
+{% if flash_done %}
+<p class="banner ok">Update recorded.</p>
+{% endif %}
+{% if flash_error %}
+<p class="banner err">{{ flash_error }}</p>
+{% endif %}
+{% if pending %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Approval</th>
+      <th>Agent</th>
+      <th>Request</th>
+      <th>Expires</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in pending %}
+    <tr>
+      <td><code>{{ a.approval_id }}</code></td>
+      <td><code>{{ a.agent_id }}</code></td>
+      <td><code>{{ a.request_id }}</code></td>
+      <td class="nowrap">{% if a.expires_at %}{{ a.expires_at }}{% else %}—{% endif %}</td>
+      <td class="actions">
+        {% if can_approve_action %}
+        <form method="post" action="/ui/approvals/{{ a.approval_id }}/approve" class="inline-form">
+          <input type="text" name="approver" placeholder="Approver ID" required />
+          <button type="submit">Approve</button>
+        </form>
+        {% endif %}
+        {% if can_deny_action %}
+        <form method="post" action="/ui/approvals/{{ a.approval_id }}/deny" class="inline-form">
+          <input type="text" name="approver" placeholder="Denier ID" required />
+          <button type="submit" class="secondary">Deny</button>
+        </form>
+        {% endif %}
+        {% if not can_approve_action and not can_deny_action %}
+        <span class="muted">No approve/deny permission</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No pending approvals.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · ReckLock{% endblock %}
+{% block content %}
+<h1>Dashboard</h1>
+<p class="lede">Snapshot of registry posture for operators & auditors.</p>
+
+<section class="cards">
+  <article class="card">
+    <h2>Agents</h2>
+    {% if 'agents' in counts %}
+    <p class="stat">{{ counts['agents'] }}</p>
+    {% else %}
+    <p class="empty">Your role cannot view agent inventory.</p>
+    {% endif %}
+  </article>
+  <article class="card">
+    <h2>Audit events</h2>
+    {% if 'audit_events' in counts %}
+    <p class="stat">{{ counts['audit_events'] }}</p>
+    {% else %}
+    <p class="empty">Requires audit read permission.</p>
+    {% endif %}
+  </article>
+  <article class="card">
+    <h2>Pending approvals</h2>
+    {% if 'pending_approvals' in counts %}
+    <p class="stat">{{ counts['pending_approvals'] }}</p>
+    {% else %}
+    <p class="empty">Requires approvals read permission.</p>
+    {% endif %}
+  </article>
+  <article class="card">
+    <h2>Active credentials</h2>
+    {% if 'active_credentials' in counts %}
+    <p class="stat">{{ counts['active_credentials'] }}</p>
+    {% else %}
+    <p class="empty">Requires credentials read permission.</p>
+    {% endif %}
+  </article>
+  <article class="card">
+    <h2>High-risk agents</h2>
+    {% if 'high_risk_agents' in counts %}
+    <p class="stat">{{ counts['high_risk_agents'] }}</p>
+    {% if high_risk_agent_ids %}
+    <ul class="compact-list">
+      {% for aid in high_risk_agent_ids %}
+      <li><code>{{ aid }}</code></li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% else %}
+    <p class="empty">Requires trust read permission.</p>
+    {% endif %}
+  </article>
+  <article class="card">
+    <h2>Policies (registered)</h2>
+    {% if policy_count is not none %}
+    <p class="stat">{{ policy_count }}</p>
+    {% else %}
+    <p class="empty">Requires policy evaluate permission for counts.</p>
+    {% endif %}
+  </article>
+</section>
+{% endblock %}

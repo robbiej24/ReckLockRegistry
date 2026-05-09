@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "agenttrust.fullname" . }}
+  labels:
+    {{- include "agenttrust.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "agenttrust.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "agenttrust.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: agenttrust
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "agenttrust.fullname" . }}-config
+          {{- if .Values.database.url }}
+          env:
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "agenttrust.fullname" . }}-db
+                  key: database-url
+          {{- end }}
+          volumeMounts:
+            - name: registry
+              mountPath: /data/registry
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: registry
+          emptyDir: {}

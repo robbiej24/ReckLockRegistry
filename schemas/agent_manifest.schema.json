@@ -1,0 +1,238 @@
+{
+  "$defs": {
+    "Developer": {
+      "description": "Developer attribution.",
+      "properties": {
+        "name": {
+          "minLength": 1,
+          "title": "Name",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "title": "Developer",
+      "type": "object"
+    },
+    "ManifestSignature": {
+      "description": "Detached signature metadata (optional until signing is implemented).",
+      "properties": {
+        "signature_base64": {
+          "minLength": 1,
+          "title": "Signature Base64",
+          "type": "string"
+        },
+        "signed_at": {
+          "minLength": 1,
+          "title": "Signed At",
+          "type": "string"
+        },
+        "signed_by_key_id": {
+          "minLength": 1,
+          "title": "Signed By Key Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "signed_by_key_id",
+        "signature_base64",
+        "signed_at"
+      ],
+      "title": "ManifestSignature",
+      "type": "object"
+    },
+    "Metadata": {
+      "description": "Manifest metadata.",
+      "properties": {
+        "created_at": {
+          "minLength": 1,
+          "title": "Created At",
+          "type": "string"
+        },
+        "registry_version": {
+          "minLength": 1,
+          "title": "Registry Version",
+          "type": "string"
+        },
+        "updated_at": {
+          "minLength": 1,
+          "title": "Updated At",
+          "type": "string"
+        }
+      },
+      "required": [
+        "created_at",
+        "updated_at",
+        "registry_version"
+      ],
+      "title": "Metadata",
+      "type": "object"
+    },
+    "PublicKeyEntry": {
+      "description": "Embedded public key reference for future verification.",
+      "properties": {
+        "algorithm": {
+          "minLength": 1,
+          "title": "Algorithm",
+          "type": "string"
+        },
+        "created_at": {
+          "minLength": 1,
+          "title": "Created At",
+          "type": "string"
+        },
+        "expires_at": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Expires At"
+        },
+        "key_id": {
+          "minLength": 1,
+          "title": "Key Id",
+          "type": "string"
+        },
+        "public_key_base64": {
+          "minLength": 1,
+          "title": "Public Key Base64",
+          "type": "string"
+        }
+      },
+      "required": [
+        "key_id",
+        "algorithm",
+        "public_key_base64",
+        "created_at"
+      ],
+      "title": "PublicKeyEntry",
+      "type": "object"
+    }
+  },
+  "description": "Agent identity manifest (unsigned YAML in Phase 1A–1B).",
+  "properties": {
+    "agent_id": {
+      "title": "Agent Id",
+      "type": "string"
+    },
+    "agent_type": {
+      "enum": [
+        "assistant",
+        "workflow_agent",
+        "transaction_agent",
+        "security_agent",
+        "research_agent",
+        "coding_agent",
+        "financial_agent",
+        "compliance_agent",
+        "other"
+      ],
+      "title": "Agent Type",
+      "type": "string"
+    },
+    "capabilities": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Capabilities",
+      "type": "array"
+    },
+    "description": {
+      "minLength": 1,
+      "title": "Description",
+      "type": "string"
+    },
+    "developer": {
+      "$ref": "#/$defs/Developer"
+    },
+    "metadata": {
+      "$ref": "#/$defs/Metadata"
+    },
+    "model_providers": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Model Providers",
+      "type": "array"
+    },
+    "name": {
+      "minLength": 1,
+      "title": "Name",
+      "type": "string"
+    },
+    "permission_scopes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Permission Scopes",
+      "type": "array"
+    },
+    "public_keys": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/PublicKeyEntry"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "title": "Public Keys"
+    },
+    "requires_human_approval": {
+      "title": "Requires Human Approval",
+      "type": "boolean"
+    },
+    "risk_level": {
+      "enum": [
+        "low",
+        "medium",
+        "high",
+        "critical"
+      ],
+      "title": "Risk Level",
+      "type": "string"
+    },
+    "signature": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ManifestSignature"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "version": {
+      "minLength": 1,
+      "title": "Version",
+      "type": "string"
+    }
+  },
+  "required": [
+    "agent_id",
+    "name",
+    "version",
+    "developer",
+    "description",
+    "agent_type",
+    "model_providers",
+    "capabilities",
+    "permission_scopes",
+    "risk_level",
+    "requires_human_approval",
+    "metadata"
+  ],
+  "title": "AgentManifest",
+  "type": "object"
+}

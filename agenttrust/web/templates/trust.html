@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Trust profiles</h1>
+<p class="lede">Deterministic score bands derived from incidents & gateway signals.</p>
+
+<section class="prose">
+  <h2>Score bands</h2>
+  <ul>
+    <li><strong>trusted</strong> — within policy norms</li>
+    <li><strong>elevated_risk</strong> — watch closely</li>
+    <li><strong>high_risk</strong> — tighten controls</li>
+    <li><strong>critical_risk</strong> — escalation expected</li>
+  </ul>
+</section>
+
+{% if profiles %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Agent</th>
+      <th>Score</th>
+      <th>Band</th>
+      <th>Incidents</th>
+      <th>Updated</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in profiles %}
+    <tr>
+      <td><code>{{ p.agent_id }}</code></td>
+      <td>{{ p.current_score }}</td>
+      <td><span class="pill">{{ p.score_band }}</span></td>
+      <td>{{ p.incident_count }}</td>
+      <td class="nowrap">{{ p.last_updated }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No trust profiles stored yet.</p>
+{% endif %}
+{% endblock %}

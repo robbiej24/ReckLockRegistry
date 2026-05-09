@@ -1,0 +1,24 @@
+{
+  "registry_version": "0.1.0",
+  "generated_at": "2026-05-08T19:39:55Z",
+  "agent_count": 1,
+  "agents": [
+    {
+      "agent_id": "agt_example-demo_a1b2c3d4",
+      "name": "Example Agent",
+      "version": "0.1.0",
+      "developer": "Example Labs",
+      "agent_type": "assistant",
+      "risk_level": "low",
+      "capabilities": [
+        "read_public_docs",
+        "draft_text"
+      ],
+      "permission_scopes": [
+        "workspace.read"
+      ],
+      "manifest_path": "registry/agents/example-agent.yaml",
+      "signature_verified": false
+    }
+  ]
+}

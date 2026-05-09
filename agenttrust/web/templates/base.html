@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}{{ title }} · ReckLock{% endblock %}</title>
+  <link rel="stylesheet" href="/ui/static/app.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><a href="/ui/">ReckLock</a> <span class="muted">Registry</span></div>
+    {% if principal is defined and principal %}
+    <nav class="nav">
+      <a class="{% if nav_active == 'dashboard' %}active{% endif %}" href="/ui/">Overview</a>
+      {% if can_agents %}<a class="{% if nav_active == 'agents' %}active{% endif %}" href="/ui/agents">Agents</a>{% endif %}
+      {% if can_audit %}<a class="{% if nav_active == 'audit' %}active{% endif %}" href="/ui/audit">Audit</a>{% endif %}
+      {% if can_approvals %}<a class="{% if nav_active == 'approvals' %}active{% endif %}" href="/ui/approvals">Approvals</a>{% endif %}
+      {% if can_trust %}<a class="{% if nav_active == 'trust' %}active{% endif %}" href="/ui/trust">Trust</a>{% endif %}
+      {% if can_credentials %}<a class="{% if nav_active == 'credentials' %}active{% endif %}" href="/ui/credentials">Credentials</a>{% endif %}
+      {% if can_executions %}<a class="{% if nav_active == 'executions' %}active{% endif %}" href="/ui/executions">Executions</a>{% endif %}
+    </nav>
+    <div class="session">
+      <span class="muted">{{ principal.role }}</span>
+      <form method="post" action="/ui/sign-out" class="inline-form"><button type="submit" class="linkish">Sign out</button></form>
+    </div>
+    {% endif %}
+  </header>
+  <main class="main">
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer muted">Operational visibility · no billing · secrets never shown</footer>
+</body>
+</html>

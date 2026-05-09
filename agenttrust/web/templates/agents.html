@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Registered agents</h1>
+<p class="lede">Agents persisted in the registry database.</p>
+{% if agents %}
+<table class="table">
+  <thead>
+    <tr>
+      <th>Agent ID</th>
+      <th>Name</th>
+      <th>Version</th>
+      <th>Risk</th>
+      <th>Type</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in agents %}
+    <tr>
+      <td><code>{{ a.agent_id }}</code></td>
+      <td>{{ a.name }}</td>
+      <td>{{ a.version }}</td>
+      <td>{{ a.risk_level }}</td>
+      <td>{{ a.agent_type }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% else %}
+<p class="empty">No agents registered yet.</p>
+{% endif %}
+{% endblock %}

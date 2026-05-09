@@ -1,0 +1,234 @@
+{
+  "critical_findings": [
+    "find_28802fbf11c8",
+    "find_30883d1df2fc",
+    "find_5c914d2eb241"
+  ],
+  "files_matched": 4,
+  "files_scanned": 4,
+  "findings": [
+    {
+      "confidence": "high",
+      "finding_id": "find_28802fbf11c8",
+      "finding_type": "deployment_workflow",
+      "likely_capabilities": [
+        "ci_pipeline",
+        "deploy_code",
+        "infrastructure_mutate"
+      ],
+      "likely_permission_scopes": [
+        "ci.execute",
+        "infrastructure.write",
+        "production.deploy",
+        "repository.write",
+        "secrets.read"
+      ],
+      "line_numbers": [
+        9,
+        10,
+        12
+      ],
+      "name": "Deploy",
+      "path": ".github/workflows/deploy.yml",
+      "rationale": "Classified as deployment_workflow (high confidence) at risk=critical. Recommended action: govern. Top signals: GitHub Actions workflow body, GitHub Actions workflow file, kubectl invocation, secret env var.",
+      "recommended_action": "govern",
+      "risk_level": "critical",
+      "signals": [
+        {
+          "category": "ci_cd",
+          "line_number": null,
+          "name": "GitHub Actions workflow file",
+          "redacted_snippet": null
+        },
+        {
+          "category": "deploy_infra",
+          "line_number": 10,
+          "name": "kubectl invocation",
+          "redacted_snippet": "      - run: kubectl apply -f infra.yml"
+        },
+        {
+          "category": "secrets",
+          "line_number": 12,
+          "name": "secret env var",
+          "redacted_snippet": "          AWS_SECRET_ACCESS_KEY=[REDACTED]"
+        },
+        {
+          "category": "ci_cd",
+          "line_number": 9,
+          "name": "GitHub Actions workflow body",
+          "redacted_snippet": "      - uses: actions/checkout@v4"
+        }
+      ]
+    },
+    {
+      "confidence": "medium",
+      "finding_id": "find_87813ac5608a",
+      "finding_type": "llm_tool",
+      "likely_capabilities": [
+        "llm_inference",
+        "write_database"
+      ],
+      "likely_permission_scopes": [
+        "ai.invoke",
+        "database.write"
+      ],
+      "line_numbers": [
+        2,
+        3,
+        6
+      ],
+      "name": "Ai Agent",
+      "path": "ai_agent.py",
+      "rationale": "Classified as llm_tool (medium confidence) at risk=high. Recommended action: register. Top signals: database write operation, imports or calls Anthropic, imports or calls OpenAI.",
+      "recommended_action": "register",
+      "risk_level": "high",
+      "signals": [
+        {
+          "category": "llm_ai",
+          "line_number": 2,
+          "name": "imports or calls OpenAI",
+          "redacted_snippet": "import openai"
+        },
+        {
+          "category": "llm_ai",
+          "line_number": 3,
+          "name": "imports or calls Anthropic",
+          "redacted_snippet": "from anthropic import Anthropic"
+        },
+        {
+          "category": "database",
+          "line_number": 6,
+          "name": "database write operation",
+          "redacted_snippet": "response = client.chat.completions.create("
+        }
+      ]
+    },
+    {
+      "confidence": "medium",
+      "finding_id": "find_30883d1df2fc",
+      "finding_type": "deployment_workflow",
+      "likely_capabilities": [
+        "deploy_code",
+        "infrastructure_mutate"
+      ],
+      "likely_permission_scopes": [
+        "infrastructure.write",
+        "production.deploy",
+        "secrets.read"
+      ],
+      "line_numbers": [
+        3,
+        4
+      ],
+      "name": "Deploy",
+      "path": "deploy.sh",
+      "rationale": "Classified as deployment_workflow (medium confidence) at risk=critical. Recommended action: govern. Top signals: kubectl invocation, secret env var.",
+      "recommended_action": "govern",
+      "risk_level": "critical",
+      "signals": [
+        {
+          "category": "deploy_infra",
+          "line_number": 3,
+          "name": "kubectl invocation",
+          "redacted_snippet": "kubectl apply -f infra.yml"
+        },
+        {
+          "category": "secrets",
+          "line_number": 4,
+          "name": "secret env var",
+          "redacted_snippet": "export AWS_SECRET_ACCESS_KEY=[REDACTED]"
+        }
+      ]
+    },
+    {
+      "confidence": "high",
+      "finding_id": "find_5c914d2eb241",
+      "finding_type": "payment_or_financial_workflow",
+      "likely_capabilities": [
+        "financial_data_access",
+        "initiate_payment",
+        "scheduled_execution",
+        "write_database"
+      ],
+      "likely_permission_scopes": [
+        "database.write",
+        "finance.read",
+        "payments.initiate",
+        "scheduler.trigger",
+        "secrets.read"
+      ],
+      "line_numbers": [
+        2,
+        4,
+        6,
+        7
+      ],
+      "name": "Nightly Billing",
+      "path": "workers/nightly_billing.py",
+      "rationale": "Classified as payment_or_financial_workflow (high confidence) at risk=critical. Recommended action: govern. Top signals: API key reference, Stripe SDK / API, database write operation, schedule library, secret env var.",
+      "recommended_action": "govern",
+      "risk_level": "critical",
+      "signals": [
+        {
+          "category": "database",
+          "line_number": 6,
+          "name": "database write operation",
+          "redacted_snippet": "    stripe.PaymentIntent.create(amount=1000, currency=\"usd\")"
+        },
+        {
+          "category": "payments_financial",
+          "line_number": 2,
+          "name": "Stripe SDK / API",
+          "redacted_snippet": "import stripe"
+        },
+        {
+          "category": "secrets",
+          "line_number": 4,
+          "name": "API key reference",
+          "redacted_snippet": "stripe.api_key=[REDACTED]"
+        },
+        {
+          "category": "secrets",
+          "line_number": 4,
+          "name": "secret env var",
+          "redacted_snippet": "stripe.api_key=[REDACTED]"
+        },
+        {
+          "category": "schedule",
+          "line_number": 7,
+          "name": "schedule library",
+          "redacted_snippet": "schedule.every().day.at(\"02:00\").do(charge)"
+        }
+      ]
+    }
+  ],
+  "findings_by_action": {
+    "govern": 3,
+    "register": 1
+  },
+  "findings_by_risk": {
+    "critical": 3,
+    "high": 1
+  },
+  "findings_by_type": {
+    "deployment_workflow": 2,
+    "llm_tool": 1,
+    "payment_or_financial_workflow": 1
+  },
+  "findings_count": 4,
+  "high_findings": [
+    "find_87813ac5608a"
+  ],
+  "recommended_governance_targets": [
+    "find_28802fbf11c8",
+    "find_30883d1df2fc",
+    "find_5c914d2eb241"
+  ],
+  "recommended_registration_targets": [
+    "find_87813ac5608a"
+  ],
+  "scanned_at": "2026-05-08T00:00:00Z",
+  "scanned_path": "/path/to/your/repo",
+  "scanner": "recklock-discover",
+  "scanner_version": "0.1.0"
+}

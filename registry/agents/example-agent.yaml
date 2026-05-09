@@ -1,0 +1,21 @@
+agent_id: agt_example-demo_a1b2c3d4
+name: Example Agent
+version: "0.1.0"
+developer:
+  name: Example Labs
+description: >
+  A minimal example assistant manifest for the ReckLock Registry (Phase 1A).
+agent_type: assistant
+model_providers:
+  - openai
+capabilities:
+  - read_public_docs
+  - draft_text
+permission_scopes:
+  - workspace.read
+risk_level: low
+requires_human_approval: false
+metadata:
+  created_at: "2026-01-15T12:00:00Z"
+  updated_at: "2026-05-01T09:30:00Z"
+  registry_version: "0.1.0"

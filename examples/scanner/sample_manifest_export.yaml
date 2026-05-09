@@ -1,0 +1,40 @@
+agent_id: agt_ai-agent-py_87813ac5
+name: Ai Agent
+version: 0.0.0-scanner
+developer:
+  name: Unknown
+description: Auto-discovered by ReckLock Discover v0.1.0 from `ai_agent.py`. This
+  is an unsigned draft manifest — review and edit before signing or registering. Detected
+  as llm_tool with medium confidence at high risk.
+agent_type: assistant
+model_providers:
+- anthropic
+- openai
+capabilities:
+- llm_inference
+- write_database
+permission_scopes:
+- ai.invoke
+- database.write
+risk_level: high
+requires_human_approval: false
+metadata:
+  created_at: '2026-05-08T21:03:40Z'
+  updated_at: '2026-05-08T21:03:40Z'
+  registry_version: 0.1.0
+  scanner_generated: true
+  scanner_version: 0.1.0
+  source_path: ai_agent.py
+  detected_signals:
+  - name: imports or calls OpenAI
+    category: llm_ai
+    line_number: 2
+  - name: imports or calls Anthropic
+    category: llm_ai
+    line_number: 3
+  - name: database write operation
+    category: database
+    line_number: 6
+  recommended_action: register
+  finding_type: llm_tool
+  confidence: medium
