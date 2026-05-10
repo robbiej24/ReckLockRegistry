@@ -56,7 +56,7 @@
           "category": "ci_cd",
           "line_number": 9,
           "name": "GitHub Actions workflow body",
-          "redacted_snippet": "      - uses: actions/checkout@v4"
+          "redacted_snippet": "      - uses: actions/checkout@v6"
         }
       ]
     },

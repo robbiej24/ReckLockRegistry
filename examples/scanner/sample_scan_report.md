@@ -59,7 +59,7 @@ _These are high-risk findings the scanner recommends registering before governin
   - **GitHub Actions workflow file** (ci_cd, filename match)
   - **kubectl invocation** (deploy_infra, line 10) — `      - run: kubectl apply -f infra.yml`
   - **secret env var** (secrets, line 12) — `          AWS_SECRET_ACCESS_KEY=[REDACTED]`
-  - **GitHub Actions workflow body** (ci_cd, line 9) — `      - uses: actions/checkout@v4`
+  - **GitHub Actions workflow body** (ci_cd, line 9) — `      - uses: actions/checkout@v6`
 
 ### `ai_agent.py` — Ai Agent
 
