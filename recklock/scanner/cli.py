@@ -24,8 +24,8 @@ from recklock.scanner.manifest_export import (
 )
 from recklock.scanner.models import Confidence, ScannerReport
 from recklock.scanner.report import (
+    DEFAULT_DETAILS_MARKDOWN_FILENAME,
     DEFAULT_JSON_FILENAME,
-    DEFAULT_MARKDOWN_FILENAME,
     write_reports,
 )
 from recklock.scanner.scanner import scan_repository
@@ -57,7 +57,7 @@ def run_scan(
         report,
         out_dir,
         json_filename=DEFAULT_JSON_FILENAME,
-        markdown_filename=DEFAULT_MARKDOWN_FILENAME,
+        markdown_filename=DEFAULT_DETAILS_MARKDOWN_FILENAME,
     )
 
     manifest_dir: Path | None = None

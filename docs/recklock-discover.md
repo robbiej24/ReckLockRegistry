@@ -102,7 +102,7 @@ Default behavior:
 - Reads only relevant file types (`.py`, `.ts/.tsx`, `.js/.jsx`, `.sh/.bash/.zsh`,
   `.yml/.yaml`, `.json`, `Dockerfile`, `docker-compose.yml`, `package.json`,
   `pyproject.toml`, `requirements.txt`, `.github/workflows/*`).
-- Writes both `recklock_discover_scan_report.json` & `recklock_discover_scan_report.md`.
+- Writes `recklock_discover_scan_report.json`, `recklock_discover_summary_of_findings.md`, & `recklock_discover_details_of_findings.md`.
 
 ### Options
 
@@ -184,8 +184,8 @@ The import command:
 
 ## How to review findings manually
 
-1. Open `recklock_discover_scan_report.md` and start with the **Top candidates to
-   govern first** section.
+1. Open `recklock_discover_summary_of_findings.md` for the executive read, then `recklock_discover_details_of_findings.md` — start with **Top candidates to
+   govern first** (or equivalent sections in the details file).
 2. For each finding, read the `signals` block and open the file at the
    listed line numbers to confirm the behavior.
 3. Edit the corresponding manifest in `recklock_manifest_exports/` to

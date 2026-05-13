@@ -8,7 +8,7 @@ from pathlib import Path
 from recklock.scanner.models import ScannerFinding, ScannerReport
 
 DEFAULT_JSON_FILENAME = "recklock_discover_scan_report.json"
-DEFAULT_MARKDOWN_FILENAME = "recklock_discover_scan_report.md"
+DEFAULT_DETAILS_MARKDOWN_FILENAME = "recklock_discover_details_of_findings.md"
 
 
 def write_json_report(report: ScannerReport, out_path: Path) -> Path:
@@ -24,7 +24,9 @@ def write_json_report(report: ScannerReport, out_path: Path) -> Path:
 
 def _md_header(report: ScannerReport) -> list[str]:
     lines = [
-        "# ReckLock Discover Report",
+        "# Details of findings",
+        "",
+        "_ReckLock Discover — full narrative & evidence._",
         "",
         f"- Scanner version: `{report.scanner_version}`",
         f"- Scanned path: `{report.scanned_path}`",
@@ -146,7 +148,7 @@ def write_reports(
     output_dir: Path,
     *,
     json_filename: str = DEFAULT_JSON_FILENAME,
-    markdown_filename: str = DEFAULT_MARKDOWN_FILENAME,
+    markdown_filename: str = DEFAULT_DETAILS_MARKDOWN_FILENAME,
 ) -> tuple[Path, Path]:
     """Write both JSON & Markdown reports into *output_dir*; return their paths."""
     output_dir.mkdir(parents=True, exist_ok=True)

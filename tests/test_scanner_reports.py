@@ -7,8 +7,8 @@ from pathlib import Path
 
 from recklock.scanner import scan_repository
 from recklock.scanner.report import (
+    DEFAULT_DETAILS_MARKDOWN_FILENAME,
     DEFAULT_JSON_FILENAME,
-    DEFAULT_MARKDOWN_FILENAME,
     render_markdown_report,
     write_reports,
 )
@@ -35,7 +35,7 @@ def test_json_report_round_trips(tmp_path: Path) -> None:
     out.mkdir()
     json_path, md_path = write_reports(rpt, out)
     assert json_path.name == DEFAULT_JSON_FILENAME
-    assert md_path.name == DEFAULT_MARKDOWN_FILENAME
+    assert md_path.name == DEFAULT_DETAILS_MARKDOWN_FILENAME
 
     parsed = json.loads(json_path.read_text(encoding="utf-8"))
     assert parsed["scanner"] == "recklock-discover"
@@ -50,7 +50,7 @@ def test_json_report_round_trips(tmp_path: Path) -> None:
 def test_markdown_report_includes_recommended_sections(tmp_path: Path) -> None:
     rpt = _populated_report(tmp_path / "repo")
     md = render_markdown_report(rpt)
-    assert "# ReckLock Discover Report" in md
+    assert "# Details of findings" in md
     assert "## Findings by Risk" in md
     assert "## Top candidates to register with ReckLock Registry" in md
     assert "## Top candidates to govern first" in md
@@ -60,7 +60,7 @@ def test_markdown_report_includes_recommended_sections(tmp_path: Path) -> None:
 def test_markdown_report_handles_empty_repo(tmp_path: Path) -> None:
     rpt = scan_repository(tmp_path)
     md = render_markdown_report(rpt)
-    assert "# ReckLock Discover Report" in md
+    assert "# Details of findings" in md
     assert "No automation, agents, or sensitive workflows were detected" in md
 
 
