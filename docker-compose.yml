@@ -3,7 +3,7 @@ services:
     image: postgres:17-alpine
     environment:
       POSTGRES_USER: recklock
-      POSTGRES_PASSWORD: recklock
+      POSTGRES_PASSWORD: ${RECKLOCK_POSTGRES_PASSWORD:-recklock-dev-local-only}
       POSTGRES_DB: recklock
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -21,7 +21,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql+psycopg://recklock:recklock@postgres:5432/recklock
+      DATABASE_URL: postgresql+psycopg://recklock:${RECKLOCK_POSTGRES_PASSWORD:-recklock-dev-local-only}@postgres:5432/recklock
       RECKLOCK_ENV: production
       RECKLOCK_API_HOST: 0.0.0.0
       RECKLOCK_API_PORT: "8080"
