@@ -22,4 +22,4 @@ __all__ = [
     "scan_repository",
 ]
 
-SCANNER_VERSION = "0.1.0"
+_SCANNER_VERSION = "0.1.0"
