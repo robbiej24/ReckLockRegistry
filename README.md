@@ -2,6 +2,50 @@
 
 ReckLock Registry is a small, file-based **AI agent identity registry**. Phase 1A stores agent metadata as **unsigned YAML manifests** on disk and builds a machine-readable **`registry/index.json`** summary for tooling & automation.
 
+
+
+<!-- hl-readme-agent:start -->
+## Agent quick access
+
+- New chat entry: `bash scripts/agent_task_entry.sh "<task>"` (from repo root).
+- Monorepo agent map: [`AGENTS.md`](../../../../AGENTS.md).
+- Stack pins: [`STACK_VERSIONS.md`](../../../../STACK_VERSIONS.md).
+- Pytest: `scripts/run-pytest.sh` or package `.venv/bin/python -m pytest` (never bare Homebrew `python3 -m pytest`).
+- AWS: agent shells use `AWS_PROFILE=hl-sso-ro` only; deploy/`hl-sso-admin` is human-only.
+
+<!-- hl-readme-agent:end -->
+
+<!-- hl-readme-stack:start -->
+## Current stack versions
+
+Direct dependencies from nearby manifests. Full monorepo inventory: [`STACK_VERSIONS.md`](../../../../STACK_VERSIONS.md). Regenerate with `python3 scripts/sync_readme_agent_sections.py`.
+
+### `Core/ReckLockFamily/ReckLockShield/ReckLockRegistry/pyproject.toml`
+
+- Package name: `recklock-registry`
+- Runtime: python >=3.11
+- Kind: `pyproject`
+
+| Package | Spec |
+|---|---|
+| `fastapi` | `>=0.136.3` |
+| `httpx` | `>=0.27` |
+| `jinja2` | `>=3.1` |
+| `psycopg[binary]` | `>=3.1` |
+| `pydantic` | `>=2.5` |
+| `pydantic-settings` | `>=2.2` |
+| `PyNaCl` | `>=1.5` |
+| `pytest` | `>=7.4` |
+| `python-multipart` | `>=0.0.9` |
+| `pyyaml` | `>=6.0` |
+| `sqlalchemy` | `>=2.0` |
+| `starlette` | `>=1.3.1` |
+| `typer` | `>=0.9` |
+| `uvicorn[standard]` | `>=0.27` |
+
+
+<!-- hl-readme-stack:end -->
+
 Signing, CI, audit logs, enterprise features, and a web UI are **not** part of Phase 1A.
 
 ## Requirements
