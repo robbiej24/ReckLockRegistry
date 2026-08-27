@@ -51,9 +51,13 @@ def _looks_secret_value(s: str) -> bool:
         return False
     if t.startswith("atk_") or t.startswith("ghp_") or t.startswith("xoxb-"):
         return True
-    if re.fullmatch(r"[A-Za-z0-9/_+\-]+={0,2}", t) and len(t) > 40:
-        return True
-    return False
+    if len(t) <= 40:
+        return False
+    body = t.rstrip("=")
+    if not body:
+        return False
+    allowed = set("ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789/_+-")
+    return all(ch in allowed for ch in body)
 
 
 def redact_metadata(meta: dict[str, Any] | None) -> dict[str, Any] | None:
