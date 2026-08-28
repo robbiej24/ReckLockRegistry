@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import hashlib
 import secrets
 from datetime import datetime, timezone
 from typing import FrozenSet
@@ -10,6 +9,11 @@ from typing import FrozenSet
 from sqlalchemy.orm import Session
 
 from recklock.auth.models import APIKeyRecord, AuthenticatedPrincipal, AuthRole, ROLE_VALUES
+from shared_core.security.token_hashing import (
+    hash_opaque_token_with_secret,
+    legacy_pbkdf2_token_hex,
+    opaque_token_hash_candidates,
+)
 
 # Permission strings used by route dependencies.
 PERM_AGENTS_READ = "agents.read"
@@ -121,8 +125,37 @@ def principal_has_permission(principal: AuthenticatedPrincipal, permission: str)
     return permission in perms
 
 
-def hash_api_key(raw_token: str) -> str:
-    return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
+def _opaque_token_pepper() -> bytes:
+    """Pepper for API-key fingerprints — requires RECKLOCK_SECRET_KEY (no in-repo default)."""
+    from recklock.api.settings import ApiSettings
+
+    settings = ApiSettings()
+    if not settings.secret_key:
+        raise RuntimeError(
+            "RECKLOCK_SECRET_KEY is required for API key hashing; set it in the environment"
+        )
+    return settings.secret_key.encode("utf-8")
+
+
+def _legacy_token_pepper() -> bytes | None:
+    """Optional migration pepper for pre-RECKLOCK_SECRET_KEY key hashes (never hardcoded)."""
+    import os
+
+    value = (os.getenv("RECKLOCK_LEGACY_TOKEN_PEPPER") or "").strip()
+    if not value:
+        return None
+    return value.encode("utf-8")
+
+
+def hash_opaque_token(raw_token: str) -> str:
+    return hash_opaque_token_with_secret(_opaque_token_pepper(), raw_token)
+
+
+def legacy_hash_opaque_token(raw_token: str) -> str | None:
+    pepper = _legacy_token_pepper()
+    if pepper is None:
+        return None
+    return legacy_pbkdf2_token_hex(salt=pepper, raw_token=raw_token)
 
 
 def _utc_now() -> datetime:
@@ -169,7 +202,7 @@ def create_api_key(
 
     r = validate_role(role)
     key_id, raw = generate_raw_api_key()
-    digest = hash_api_key(raw)
+    digest = hash_opaque_token(raw)
     now = _utc_now()
     insert_api_key_row(
         session,
@@ -200,8 +233,37 @@ def authenticate_api_key(session: Session, raw_token: str) -> AuthenticatedPrinc
     raw = raw_token.strip()
     if not raw:
         return None
-    digest = hash_api_key(raw)
-    row = fetch_api_key_by_hash(session, digest)
+    row = None
+    pepper = _opaque_token_pepper()
+    candidates = list(opaque_token_hash_candidates(pepper, raw))
+    # Pre-remediation fingerprints used HMAC-SHA256 (verify-only migration path).
+    import hashlib
+    import hmac as hmac_mod
+
+    hmac_digest = hmac_mod.new(pepper, raw.encode("utf-8"), hashlib.sha256).hexdigest()
+    if hmac_digest not in candidates:
+        candidates.append(hmac_digest)
+    for digest in candidates:
+        row = fetch_api_key_by_hash(session, digest)
+        if row is not None:
+            break
+    if row is None:
+        legacy_digest = legacy_hash_opaque_token(raw)
+        if legacy_digest is not None:
+            row = fetch_api_key_by_hash(session, legacy_digest)
+    if row is None:
+        return None
+    if row.disabled:
+        return None
+    if row.expires_at is not None and row.expires_at < _utc_now():
+        return None
+    return AuthenticatedPrincipal(key_id=row.key_id, role=row.role, name=row.name)
+
+
+def principal_from_key_id(session: Session, key_id: str) -> AuthenticatedPrincipal | None:
+    from recklock.db.repositories import fetch_api_key_by_id
+
+    row = fetch_api_key_by_id(session, key_id.strip())
     if row is None:
         return None
     if row.disabled:
