@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import os
 from pathlib import Path
 
 from pydantic import BaseModel, Field
@@ -45,7 +44,7 @@ class ApiSettings(BaseSettings):
     )
     secret_key: str | None = Field(
         default=None,
-        description="Optional signing secret reserved for future use (RECKLOCK_SECRET_KEY).",
+        description="Required for API key hashing & future signing (RECKLOCK_SECRET_KEY).",
     )
     registry_root: Path = Field(
         default_factory=lambda: Path.cwd(),
@@ -78,6 +77,13 @@ class ApiSettings(BaseSettings):
     observation_mode: bool = Field(
         default=False,
         description="When True, API telemetry endpoints persist events (RECKLOCK_OBSERVATION_MODE).",
+    )
+    ui_cookie_secure: bool = Field(
+        default=True,
+        description=(
+            "Set the Secure flag on the UI session cookie (RECKLOCK_UI_COOKIE_SECURE). "
+            "Keep True for HTTPS; set False only for local HTTP development."
+        ),
     )
 
     def resolve_under_root(self, path: Path | None, default_relative: str | Path) -> Path:
