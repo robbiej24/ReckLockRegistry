@@ -16,6 +16,7 @@ __all__ = [
     "FindingType",
     "RecommendedAction",
     "RiskLevel",
+    "SCANNER_VERSION",
     "ScannerFinding",
     "ScannerReport",
     "ScannerSignal",
