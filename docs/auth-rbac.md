@@ -4,9 +4,12 @@ This service protects non-health HTTP endpoints with **Bearer API keys** & **sco
 
 ## API key generation
 
+Set `RECKLOCK_SECRET_KEY` before creating or verifying keys (used as the hashing pepper). There is no in-repo default.
+
 Use the CLI against your configured database (same URL rules as `recklock-registry init-db`):
 
 ```bash
+export RECKLOCK_SECRET_KEY='your-local-pepper'
 recklock-registry create-api-key --name "Local Admin" --role admin
 ```
 
