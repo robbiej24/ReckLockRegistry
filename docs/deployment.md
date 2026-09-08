@@ -20,7 +20,8 @@ Environment variables use the `RECKLOCK_` prefix unless noted. Common keys:
 | `RECKLOCK_API_PORT` | TCP port for `recklock-registry serve`. |
 | `RECKLOCK_REGISTRY_ROOT` | Filesystem root for manifests, `registry/index.json`, audit logs, & related paths. |
 | `RECKLOCK_ENABLE_REAL_CONNECTORS` | When `true`, connectors may perform real external side effects (default off). |
-| `RECKLOCK_SECRET_KEY` | Reserved for future signing use; optional today. |
+| `RECKLOCK_SECRET_KEY` | Required for API key hashing (also reserved for future signing). |
+| `RECKLOCK_LEGACY_TOKEN_PEPPER` | Optional migration-only pepper for pre-`RECKLOCK_SECRET_KEY` key hashes. |
 
 See `.env.example` for a starting point.
 
