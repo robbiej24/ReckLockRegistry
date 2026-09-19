@@ -28,6 +28,7 @@ services:
       # Ephemeral path writable by the container non-root user (mount a volume here for production registry files).
       RECKLOCK_REGISTRY_ROOT: /tmp/recklock-registry
       RECKLOCK_ENABLE_REAL_CONNECTORS: "false"
+      RECKLOCK_SECRET_KEY: ${RECKLOCK_SECRET_KEY:-change-me-local-only}
     ports:
       - "8080:8080"
     healthcheck:
