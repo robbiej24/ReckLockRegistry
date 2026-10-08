@@ -647,8 +647,6 @@ def create_api_key_cmd(
 @app.command("list-connectors")
 def list_connectors_cmd() -> None:
     """Print registered connector descriptors as JSON."""
-    import json
-
     from recklock.connectors.registry import list_connector_descriptors
 
     typer.echo(json.dumps(list_connector_descriptors(), indent=2, sort_keys=True))
@@ -664,8 +662,6 @@ def connector_dry_run_cmd(
     ),
 ) -> None:
     """Validate a connector invocation without calling external systems (dry-run)."""
-    import json
-
     import yaml
 
     from recklock.connectors.invoke import ConnectorHttpError, run_connector
