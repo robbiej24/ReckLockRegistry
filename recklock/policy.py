@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal
@@ -33,7 +34,7 @@ class RuleConditions(BaseModel):
     def amounts_must_be_finite(cls, v: float | None) -> float | None:
         if v is None:
             return None
-        if v != v or v in (float("inf"), float("-inf")):  # noqa: PLR0124 — NaN check
+        if math.isnan(v) or v in (float("inf"), float("-inf")):
             raise ValueError("amount bounds must be finite numbers")
         return v
 
@@ -55,7 +56,7 @@ class ActionRequest(BaseModel):
     def amount_finite(cls, v: float | None) -> float | None:
         if v is None:
             return None
-        if v != v or v in (float("inf"), float("-inf")):  # noqa: PLR0124
+        if math.isnan(v) or v in (float("inf"), float("-inf")):
             raise ValueError("amount must be a finite number")
         return v
 
