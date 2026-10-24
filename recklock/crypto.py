@@ -34,7 +34,7 @@ def save_private_key(path: str | Path, signing_key: signing.SigningKey) -> None:
     try:
         os.chmod(p, 0o600)
     except OSError:
-        pass
+        pass  # Best-effort; non-fatal if this path fails.
 
 
 def load_private_key(path: str | Path) -> signing.SigningKey:
