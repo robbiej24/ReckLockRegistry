@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import math
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal, Sequence
@@ -54,7 +55,7 @@ class ExecutionRequest(BaseModel):
     def amount_finite(cls, v: float | None) -> float | None:
         if v is None:
             return None
-        if v != v or v in (float("inf"), float("-inf")):  # noqa: PLR0124
+        if math.isnan(v) or v in (float("inf"), float("-inf")):
             raise ValueError("amount must be a finite number")
         return v
 
@@ -498,16 +499,18 @@ def execute_request(
 
         approval_audits: list[AuditEvent] = []
         if db_session is not None:
-            from recklock.db import repositories as repos
+            import importlib
 
+            repos = importlib.import_module("recklock.db.repositories")
             rows = repos.load_approvals_map(db_session)
         else:
             rows = load_approvals(ap_log)
         existing = rows.get(approval_id)
         if existing is not None:
             if db_session is not None:
-                from recklock.db import repositories as repos
+                import importlib
 
+                repos = importlib.import_module("recklock.db.repositories")
                 existing, exp_audit = repos.maybe_expire_stale_db(db_session, existing, now=ts)
             else:
                 existing, exp_audit = maybe_expire_stale_request(existing, log_path=ap_log, now=ts)
@@ -635,7 +638,8 @@ def execute_request(
 
         expires_at = _parse_approval_expires(request.metadata)
         if db_session is not None:
-            from recklock.db import repositories as repos
+            import importlib
+            repos = importlib.import_module('recklock.db.repositories')
 
             rec, created_audit = repos.create_approval_request_db(
                 db_session,
