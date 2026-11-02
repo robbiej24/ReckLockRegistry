@@ -11,7 +11,7 @@ from sqlalchemy.orm import sessionmaker
 
 from recklock.api.app import create_app, reset_cached_settings_for_tests
 from recklock.api.settings import ApiSettings
-from recklock.auth.service import create_api_key, hash_api_key
+from recklock.auth.service import create_api_key, hash_opaque_token
 from recklock.db import models as m
 from recklock.db.session import create_engine_from_settings
 
@@ -115,5 +115,5 @@ def test_raw_key_not_stored(rbac_settings: ApiSettings) -> None:
     db_path = Path(db_url.replace("sqlite:///", "", 1))
     on_disk = db_path.read_bytes()
     assert raw.encode("utf-8") not in on_disk
-    digest = hash_api_key(raw)
+    digest = hash_opaque_token(raw)
     assert digest.encode("ascii") in on_disk
