@@ -1,8 +1,14 @@
 """Pytest fixtures."""
 
+from __future__ import annotations
+
+import os
 from pathlib import Path
 
 import pytest
+
+# Local test pepper only — never the retired in-repo default.
+os.environ.setdefault("RECKLOCK_SECRET_KEY", "local-recklock-registry-test-pepper")
 
 
 @pytest.fixture
