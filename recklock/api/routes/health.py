@@ -7,6 +7,10 @@ from typing import Any
 from fastapi import APIRouter, Request
 from fastapi.responses import JSONResponse
 from sqlalchemy import text
+from shared_core.security.client_errors import (
+    client_error_code,
+    PROBE_FAILED,
+)
 
 router = APIRouter()
 
@@ -32,7 +36,7 @@ def ready(request: Request) -> dict[str, Any] | JSONResponse:
     except Exception as exc:
         return JSONResponse(
             status_code=503,
-            content={"status": "not_ready", "reason": "database_unreachable", "detail": str(exc)},
+            content={"status": "not_ready", "reason": "database_unreachable", "detail": client_error_code(code=PROBE_FAILED)},
         )
     dialect = getattr(engine.dialect, "name", "unknown")
     return {"status": "ready", "database": dialect}
