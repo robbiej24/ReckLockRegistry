@@ -12,7 +12,6 @@ from sqlalchemy.orm import Session
 from recklock.auth.models import APIKeyRecord
 from recklock.approvals import ApprovalRequest, build_approval_audit_event, is_request_fully_approved
 from recklock.audit import AuditEvent, seal_event
-from recklock.gateway import ExecutionRequest, ExecutionResponse
 from recklock.policy import Policy
 from recklock.registry import IndexAgentEntry
 from recklock.trust import IncidentRecord, TrustProfile, incidents_for_agent, update_trust_profile
@@ -583,6 +582,26 @@ def fetch_api_key_by_hash(session: Session, key_hash: str) -> APIKeyRecord | Non
     )
 
 
+def fetch_api_key_by_id(session: Session, key_id: str) -> APIKeyRecord | None:
+    conn = session.connection()
+    row = conn.execute(select(m.api_keys).where(m.api_keys.c.key_id == key_id)).first()
+    if row is None:
+        return None
+    expires = row.expires_at
+    created = row.created_at
+    exp_dt = _parse_api_key_dt(expires) if expires else None
+    cr_dt = _parse_api_key_dt(created)
+    return APIKeyRecord(
+        key_id=row.key_id,
+        key_hash=row.key_hash,
+        name=row.name,
+        role=row.role,  # type: ignore[arg-type]
+        created_at=cr_dt,
+        expires_at=exp_dt,
+        disabled=bool(row.disabled),
+    )
+
+
 def _parse_api_key_dt(text: str) -> datetime:
     if text.endswith("Z"):
         text = text[:-1] + "+00:00"
@@ -593,6 +612,8 @@ def _parse_api_key_dt(text: str) -> datetime:
 
 
 def list_execution_pairs(session: Session) -> list[tuple[ExecutionRequest, ExecutionResponse]]:
+    from recklock.gateway import ExecutionRequest, ExecutionResponse
+
     conn = session.connection()
     stmt = (
         select(m.execution_requests.c.request_json, m.execution_responses.c.response_json)
@@ -622,6 +643,8 @@ def list_audit_events_recent(session: Session, *, limit: int = 100) -> list[Audi
 
 
 def list_execution_pairs_recent(session: Session, *, limit: int = 50) -> list[tuple[ExecutionRequest, ExecutionResponse]]:
+    from recklock.gateway import ExecutionRequest, ExecutionResponse
+
     conn = session.connection()
     stmt = (
         select(m.execution_requests.c.request_json, m.execution_responses.c.response_json)
