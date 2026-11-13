@@ -12,7 +12,8 @@ from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session
 
-from recklock.api.deps import get_db
+from recklock.api.deps import get_db, get_settings
+from recklock.api.settings import ApiSettings
 from recklock.auth.models import AuthenticatedPrincipal
 from recklock.auth.service import (
     PERM_AGENTS_READ,
@@ -27,6 +28,7 @@ from recklock.auth.service import (
     authenticate_api_key,
     principal_has_permission,
 )
+from shared_core.security.cookie_safety import sanitize_cookie_value
 from recklock.credentials.models import TemporaryCredential
 from recklock.credentials.storage import list_credentials as list_credentials_db
 from recklock.db.repositories import (
@@ -41,6 +43,7 @@ from recklock.db.repositories import (
     list_trust_profiles,
 )
 from recklock.web.deps import UI_BEARER_COOKIE, get_ui_principal, require_ui_permissions
+from recklock.web.ui_sessions import issue_ui_session, revoke_ui_session
 
 _TEMPLATES_DIR = Path(__file__).resolve().parent / "templates"
 templates = Jinja2Templates(directory=str(_TEMPLATES_DIR))
@@ -98,6 +101,7 @@ def sign_in_page(request: Request) -> Any:
 def sign_in_submit(
     request: Request,
     db: Session = Depends(get_db),
+    settings: ApiSettings = Depends(get_settings),
     token: str = Form(""),
 ) -> Any:
     raw = token.strip()
@@ -116,20 +120,24 @@ def sign_in_submit(
             {"title": "Sign in", "error": "Invalid, expired, or disabled API key."},
             status_code=status.HTTP_401_UNAUTHORIZED,
         )
+    cookie_value = issue_ui_session(principal.key_id)
     resp = RedirectResponse(url="/ui/", status_code=status.HTTP_303_SEE_OTHER)
     resp.set_cookie(
         UI_BEARER_COOKIE,
-        value=raw,
+        value=sanitize_cookie_value(cookie_value),
         httponly=True,
         samesite="lax",
         max_age=86400 * 7,
-        secure=False,
+        secure=bool(settings.ui_cookie_secure),
     )
     return resp
 
 
 @router.post("/sign-out")
-def sign_out() -> RedirectResponse:
+def sign_out(request: Request) -> RedirectResponse:
+    session_token = request.cookies.get(UI_BEARER_COOKIE)
+    if session_token:
+        revoke_ui_session(session_token.strip())
     resp = RedirectResponse(url="/ui/sign-in", status_code=status.HTTP_303_SEE_OTHER)
     resp.delete_cookie(UI_BEARER_COOKIE)
     return resp
