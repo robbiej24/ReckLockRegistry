@@ -9,7 +9,8 @@ from sqlalchemy.orm import Session
 
 from recklock.api.deps import get_db
 from recklock.auth.models import AuthenticatedPrincipal
-from recklock.auth.service import authenticate_api_key, principal_has_permission
+from recklock.auth.service import authenticate_api_key, principal_from_key_id, principal_has_permission
+from recklock.web.ui_sessions import resolve_ui_session
 
 UI_BEARER_COOKIE = "recklock_ui_bearer"
 
@@ -36,7 +37,11 @@ def get_ui_principal(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication required. Use Authorization: Bearer or sign in at /ui/sign-in.",
         )
-    principal = authenticate_api_key(db, token)
+    key_id = resolve_ui_session(token)
+    if key_id is not None:
+        principal = principal_from_key_id(db, key_id)
+    else:
+        principal = authenticate_api_key(db, token)
     if principal is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
